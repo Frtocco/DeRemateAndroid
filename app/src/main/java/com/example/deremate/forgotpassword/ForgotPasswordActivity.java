@@ -1,5 +1,6 @@
-package com.example.deremate;
+package com.example.deremate.forgotpassword;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -12,55 +13,47 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-public class LogInActivity extends AppCompatActivity {
+import com.example.deremate.R;
+import com.example.deremate.login.LogInActivity;
+import com.example.deremate.register.UserRegisterActivity;
 
-
+public class ForgotPasswordActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-
-        setContentView(R.layout.activity_log_in);
-
-        Button bLogIn = findViewById(R.id.bLogIn);
-        EditText usernameText = findViewById(R.id.etUsername);
-        EditText passwordText = findViewById(R.id.etPassword);
-        TextView forgotPassword = findViewById(R.id.tvForgotPassword);
-        TextView register = findViewById(R.id.tvRegister);
-
+        setContentView(R.layout.activity_forgot_password);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
 
-        register.setOnClickListener(v -> {
+        EditText emailText = findViewById(R.id.etEmail);
+        Button sendEmailButton = findViewById(R.id.bSendEmail);
+        TextView backToLogIn = findViewById(R.id.tvToLogIn);
 
-        });
+        sendEmailButton.setOnClickListener(v -> {
+            // Enviar mail para recuperar contraseña
+            String email = emailText.getText().toString();
 
-        forgotPassword.setOnClickListener(v -> {
-
-        });
-
-        bLogIn.setOnClickListener(v -> {
-            // Log in, obtiene las credenciales al tocar el boton
-
-            String username = usernameText.getText().toString();
-            String password = passwordText.getText().toString();
-
-            if((username.isEmpty() || password.isEmpty())){
+            if(email.isEmpty()){
                 new AlertDialog.Builder(this)
                         .setTitle("Atención")
-                        .setMessage("Ingrese un usuario y contraseña.")
+                        .setMessage("Introduce un email valido")
                         .setPositiveButton("OK", (dialog, which) -> {
                             dialog.dismiss();
                         })
                         .show();
             }else{
-                // Llamada a la API
+                // Enviar email (verificar que exista la cuenta antes)
             }
+        });
 
+        backToLogIn.setOnClickListener(v -> {
+            Intent intent = new Intent(ForgotPasswordActivity.this, LogInActivity.class);
+            startActivity(intent);
         });
 
 
