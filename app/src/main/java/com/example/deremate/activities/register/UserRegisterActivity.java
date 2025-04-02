@@ -1,4 +1,4 @@
-package com.example.deremate.register;
+package com.example.deremate.activities.register;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,7 +11,8 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.deremate.R;
-import com.example.deremate.login.LogInActivity;
+import com.example.deremate.activities.login.LogInActivity;
+import android.util.Patterns;
 
 import android.widget.Button;
 import android.widget.EditText;
@@ -35,6 +36,7 @@ public class UserRegisterActivity extends AppCompatActivity {
         Button buttonRegister = findViewById(R.id.bRegister);
         EditText usernameText = findViewById(R.id.etUsername);
         EditText passwordText = findViewById(R.id.etPassword);
+        EditText emailText = findViewById(R.id.etEmail);
 
 
         toLogIn.setOnClickListener(v -> {
@@ -46,8 +48,9 @@ public class UserRegisterActivity extends AppCompatActivity {
             // Register de usuario, pasar datos a la API y cargar usuario
             String username = usernameText.getText().toString();
             String password = passwordText.getText().toString();
+            String email = emailText.getText().toString();
 
-            if(username.length() < 4 || password.length() < 4){
+            if(username.length() < 4 || password.length() < 4 || !isValidEmail(emailText)){
                 new AlertDialog.Builder(this)
                         .setTitle("Atención")
                         .setMessage("El nombre de usuario y contraseña deben tener mas de 4 caracteres.")
@@ -56,11 +59,21 @@ public class UserRegisterActivity extends AppCompatActivity {
                         })
                         .show();
             }else{
-                // conectar con api y crear usuario
+                try {
+                    // Conectar con la api y verificar que el usuario sea creado correctamente.
+                    // Crear JWT (pendiente)
+                } catch (Error e){
+
+                }
             }
 
         });
 
+    }
+
+    public boolean isValidEmail(EditText editText) {
+        String email = editText.getText().toString().trim();
+        return Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 
 }

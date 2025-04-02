@@ -1,4 +1,4 @@
-package com.example.deremate.forgotpassword;
+package com.example.deremate.activities.forgotpassword;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,8 +14,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.deremate.R;
-import com.example.deremate.login.LogInActivity;
-import com.example.deremate.register.UserRegisterActivity;
+import com.example.deremate.activities.login.LogInActivity;
 
 public class ForgotPasswordActivity extends AppCompatActivity {
 

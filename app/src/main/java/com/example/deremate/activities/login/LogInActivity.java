@@ -1,4 +1,4 @@
-package com.example.deremate.login;
+package com.example.deremate.activities.login;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,8 +14,9 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.deremate.R;
-import com.example.deremate.forgotpassword.ForgotPasswordActivity;
-import com.example.deremate.register.UserRegisterActivity;
+import com.example.deremate.activities.forgotpassword.ForgotPasswordActivity;
+import com.example.deremate.activities.menu.MenuActivity;
+import com.example.deremate.activities.register.UserRegisterActivity;
 
 public class LogInActivity extends AppCompatActivity {
 
@@ -64,7 +65,9 @@ public class LogInActivity extends AppCompatActivity {
                         })
                         .show();
             }else{
-                // Llamada a la API (pronto)
+                // Verificar con API
+                Intent intent = new Intent(LogInActivity.this, MenuActivity.class);
+                startActivity(intent);
             }
 
         });

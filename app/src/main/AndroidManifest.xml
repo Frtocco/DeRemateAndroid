@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <application
+        android:name=".DeRemateApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -13,14 +14,17 @@
         android:theme="@style/Theme.DeRemate"
         tools:targetApi="31">
         <activity
-            android:name=".forgotpassword.ForgotPasswordActivity"
+            android:name=".activities.menu.MenuActivity"
             android:exported="false" />
         <activity
-            android:name=".register.UserRegisterActivity"
+            android:name=".activities.forgotpassword.ForgotPasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.register.UserRegisterActivity"
             android:exported="false"
             android:theme="@style/Theme.DeRemate" />
         <activity
-            android:name=".login.LogInActivity"
+            android:name=".activities.login.LogInActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
