@@ -19,7 +19,7 @@ public class NetworkModule {
     @Singleton
     Retrofit provideRetrofit() {
         return new Retrofit.Builder()
-                .baseUrl("https://10.100.114.30:1234/")
+                .baseUrl("http://10.100.114.30:1234/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
     }
