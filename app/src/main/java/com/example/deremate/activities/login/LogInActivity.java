@@ -15,17 +15,29 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.deremate.R;
 import com.example.deremate.activities.forgotpassword.ForgotPasswordActivity;
-import com.example.deremate.activities.menu.MenuActivity;
 import com.example.deremate.activities.register.UserRegisterActivity;
+import com.example.deremate.data.api.UserApi;
+import com.example.deremate.data.api.model.UserModel;
 
+import java.util.List;
+
+import javax.inject.Inject;
+
+import dagger.hilt.android.AndroidEntryPoint;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+@AndroidEntryPoint
 public class LogInActivity extends AppCompatActivity {
-
-
+    @Inject
+    UserApi userApi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
+
 
         setContentView(R.layout.activity_log_in);
         Button bLogIn = findViewById(R.id.bLogIn);
@@ -65,9 +77,22 @@ public class LogInActivity extends AppCompatActivity {
                         })
                         .show();
             }else{
-                // Verificar con API
-                Intent intent = new Intent(LogInActivity.this, MenuActivity.class);
-                startActivity(intent);
+                userApi.getUsers().enqueue(new Callback<List<UserModel>>() {
+                    @Override
+                    public void onResponse(Call<List<UserModel>> call, Response<List<UserModel>> response) {
+                        if(!response.isSuccessful()){
+                            System.out.println("Codigo: " + response.code());
+                            return;
+                        }
+                        List<UserModel> users = response.body();
+                        System.out.println(users.get(0));
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<UserModel>> call, Throwable t) {
+                        System.out.println(t.getMessage());
+                    }
+                });
             }
 
         });
