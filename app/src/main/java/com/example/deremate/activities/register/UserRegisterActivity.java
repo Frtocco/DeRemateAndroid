@@ -12,13 +12,31 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.deremate.R;
 import com.example.deremate.activities.login.LogInActivity;
+import com.example.deremate.activities.menu.MenuActivity;
+import com.example.deremate.data.api.UserApi;
+import com.example.deremate.data.api.model.UserModel;
+import com.example.deremate.data.repository.token.TokenRepository;
+
 import android.util.Patterns;
 
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.AndroidEntryPoint;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+@AndroidEntryPoint
 public class UserRegisterActivity extends AppCompatActivity {
+
+    @Inject
+    UserApi userApi;
+
+    @Inject
+    TokenRepository tokenRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +68,8 @@ public class UserRegisterActivity extends AppCompatActivity {
             String password = passwordText.getText().toString();
             String email = emailText.getText().toString();
 
+            UserModel userModel = new UserModel(username, email, password);
+
             if(username.length() < 4 || password.length() < 4 || !isValidEmail(emailText)){
                 new AlertDialog.Builder(this)
                         .setTitle("Atención")
@@ -59,12 +79,24 @@ public class UserRegisterActivity extends AppCompatActivity {
                         })
                         .show();
             }else{
-                try {
-                    // Conectar con la api y verificar que el usuario sea creado correctamente.
-                    // Crear JWT (pendiente)
-                } catch (Error e){
+                userApi.createUser(userModel).enqueue(new Callback<UserModel>() {
+                    @Override
+                    public void onResponse(Call<UserModel> call, Response<UserModel> response) {
+                        if(response.isSuccessful() && response.body() != null ){
+                            String token = response.body().getJwt();
+                            tokenRepository.saveToken(token);
+                            Intent intent = new Intent(UserRegisterActivity.this, MenuActivity.class);
+                            startActivity(intent);
+                        }else{
+                            System.out.println("Error en la respuesta: " + response.code());
+                        }
+                    }
 
-                }
+                    @Override
+                    public void onFailure(Call<UserModel> call, Throwable t) {
+                        System.out.println(t.getMessage());
+                    }
+                });
             }
 
         });

@@ -7,6 +7,12 @@ public class UserModel {
     private String password;
     private String jwt;
 
+    public UserModel(String username, String email, String password) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+    }
+
     public String getUserId() {
         return userId;
     }
@@ -25,5 +31,9 @@ public class UserModel {
 
     public String getJwt() {
         return jwt;
+    }
+
+    public void setJwt(String jwt) {
+        this.jwt = jwt;
     }
 }
