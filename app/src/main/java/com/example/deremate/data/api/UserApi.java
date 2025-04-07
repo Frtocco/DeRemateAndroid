@@ -1,7 +1,6 @@
 package com.example.deremate.data.api;
 
-import com.example.deremate.data.api.model.UserLogIn;
-import com.example.deremate.data.api.model.UserModel;
+import com.example.deremate.data.api.model.*;
 
 import java.util.List;
 
@@ -22,5 +21,5 @@ public interface UserApi {
     Call<UserModel> createUser(@Body UserModel user);
 
     @POST("users/login")
-    Call<ResponseBody> login(UserLogIn user);
+    Call<ResponseBody> login(@Body UserLogIn user);
 }

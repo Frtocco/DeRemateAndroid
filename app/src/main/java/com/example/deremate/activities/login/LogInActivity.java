@@ -86,20 +86,24 @@ public class LogInActivity extends AppCompatActivity {
                 userApi.login(loggedUser).enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-
-                        Intent intent = new Intent(LogInActivity.this, MenuActivity.class);
-                        startActivity(intent);
+                        if(response.isSuccessful()) {
+                            Intent intent = new Intent(LogInActivity.this, MenuActivity.class);
+                            startActivity(intent);
+                        }else{
+                            new AlertDialog.Builder(LogInActivity.this)
+                                    .setTitle("Atención")
+                                    .setMessage("Usuario o contraseña incorrectos.")
+                                    .setPositiveButton("OK", (dialog, which) -> {
+                                        dialog.dismiss();
+                                    })
+                                    .show();
+                        }
                     }
 
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        new AlertDialog.Builder(LogInActivity.this)
-                                .setTitle("Atención")
-                                .setMessage("Usuario o contraseña incorrectos.")
-                                .setPositiveButton("OK", (dialog, which) -> {
-                                    dialog.dismiss();
-                                })
-                                .show();
+                        System.out.println(t.getMessage());
+
                     }
                 });
             }
