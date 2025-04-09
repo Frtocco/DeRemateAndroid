@@ -14,6 +14,7 @@ import com.example.deremate.R;
 import com.example.deremate.activities.login.LogInActivity;
 import com.example.deremate.activities.menu.MenuActivity;
 import com.example.deremate.data.api.UserApi;
+import com.example.deremate.data.api.model.TokenModel;
 import com.example.deremate.data.api.model.UserModel;
 import com.example.deremate.data.repository.token.TokenRepository;
 
@@ -71,6 +72,7 @@ public class UserRegisterActivity extends AppCompatActivity {
             UserModel userModel = new UserModel(username, email, password);
 
             if(username.length() < 4 || password.length() < 4 || !isValidEmail(emailText)){
+                // Mensaje de error para verificar porque no se pudo crear la cuenta
                 new AlertDialog.Builder(this)
                         .setTitle("Atención")
                         .setMessage("El nombre de usuario y contraseña deben tener mas de 4 caracteres.")
@@ -79,21 +81,34 @@ public class UserRegisterActivity extends AppCompatActivity {
                         })
                         .show();
             }else{
-                userApi.createUser(userModel).enqueue(new Callback<UserModel>() {
+                userApi.createUser(userModel).enqueue(new Callback<TokenModel>() {
                     @Override
-                    public void onResponse(Call<UserModel> call, Response<UserModel> response) {
+                    public void onResponse(Call<TokenModel> call, Response<TokenModel> response) {
                         if(response.isSuccessful() && response.body() != null ){
-                            String token = response.body().getJwt();
+                            // Al crear un usuario, se guarda un token de persistencia para que sea mantenido
+                            TokenModel tokenModel = response.body();
+                            System.out.println(tokenModel.getToken());
+
+                            String token = tokenModel.getToken();
                             tokenRepository.saveToken(token);
+
                             Intent intent = new Intent(UserRegisterActivity.this, MenuActivity.class);
                             startActivity(intent);
+                            finish();
                         }else{
-                            System.out.println("Error en la respuesta: " + response.code());
+                            new AlertDialog.Builder(UserRegisterActivity.this)
+                                    .setTitle("Atención")
+                                    .setMessage("El email o nombre de usuario ya estan en uso.")
+                                    .setPositiveButton("OK", (dialog, which) -> {
+                                        dialog.dismiss();
+                                    })
+                                    .show();
                         }
                     }
 
+
                     @Override
-                    public void onFailure(Call<UserModel> call, Throwable t) {
+                    public void onFailure(Call<TokenModel> call, Throwable t) {
                         System.out.println(t.getMessage());
                     }
                 });

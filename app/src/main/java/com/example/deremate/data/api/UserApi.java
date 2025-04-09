@@ -11,15 +11,18 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 public interface UserApi {
-    @GET("users")
+    @GET("users") // Get a todos los usuarios
     Call<List<UserModel>> getUsers();
 
-    @GET("users/:id")
+    @GET("users/:id") //Get users por id
     Call<UserModel> getUserById();
 
     @POST("users")
-    Call<UserModel> createUser(@Body UserModel user);
+    Call<TokenModel> createUser(@Body UserModel user);
 
-    @POST("users/login")
-    Call<ResponseBody> login(@Body UserLogIn user);
+    @POST("users/login") //Login
+    Call<TokenModel> login(@Body UserLogIn user);
+
+    @POST("users/jwt") //Chequear usuario con JWT guardado
+    Call<UserModel> checkUserToken(@Body TokenModel token);
 }
