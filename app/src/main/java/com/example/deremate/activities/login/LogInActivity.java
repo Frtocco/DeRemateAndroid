@@ -58,77 +58,80 @@ public class LogInActivity extends AppCompatActivity {
                     Intent intent = new Intent(LogInActivity.this, MenuActivity.class);
                     startActivity(intent);
                     finish();
+                }else{
+                    showLoginScreen();
                 }
             }
 
             @Override
             public void onFailure(Call<UserModel> call, Throwable t) {
-                //Muestra el log in si falla la verificacion del JWT o no existe
+                showLoginScreen();
+            }
+        });
+    }
+    private void showLoginScreen() {
+        EdgeToEdge.enable(LogInActivity.this);
 
-                EdgeToEdge.enable(LogInActivity.this);
+        setContentView(R.layout.activity_log_in);
+        Button bLogIn = findViewById(R.id.bLogIn);
+        EditText usernameText = findViewById(R.id.etUsername);
+        EditText passwordText = findViewById(R.id.etPassword);
+        TextView forgotPassword = findViewById(R.id.tvForgotPassword);
+        TextView register = findViewById(R.id.tvRegister);
 
-                setContentView(R.layout.activity_log_in);
-                Button bLogIn = findViewById(R.id.bLogIn);
-                EditText usernameText = findViewById(R.id.etUsername);
-                EditText passwordText = findViewById(R.id.etPassword);
-                TextView forgotPassword = findViewById(R.id.tvForgotPassword);
-                TextView register = findViewById(R.id.tvRegister);
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
 
-                ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-                    Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-                    v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-                    return insets;
-                });
+        register.setOnClickListener(v -> {
+            Intent intent = new Intent(LogInActivity.this, UserRegisterActivity.class);
+            startActivity(intent);
+        });
 
-                register.setOnClickListener(v -> {
-                    Intent intent = new Intent(LogInActivity.this, UserRegisterActivity.class);
-                    startActivity(intent);
-                });
+        forgotPassword.setOnClickListener(v -> {
+            Intent intent = new Intent(LogInActivity.this, ForgotPasswordActivity.class);
+            startActivity(intent);
+        });
 
-                forgotPassword.setOnClickListener(v -> {
-                    Intent intent = new Intent(LogInActivity.this, ForgotPasswordActivity.class);
-                    startActivity(intent);
-                });
+        bLogIn.setOnClickListener(v -> {
+            String username = usernameText.getText().toString();
+            String password = passwordText.getText().toString();
 
-                bLogIn.setOnClickListener(v -> {
-                    String username = usernameText.getText().toString();
-                    String password = passwordText.getText().toString();
+            if (username.isEmpty() || password.isEmpty()) {
+                new AlertDialog.Builder(LogInActivity.this)
+                        .setTitle("Atención")
+                        .setMessage("Ingrese un usuario y contraseña.")
+                        .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
+                        .show();
+            } else {
+                UserLogIn loggedUser = new UserLogIn(username, password);
 
-                    if (username.isEmpty() || password.isEmpty()) {
-                        new AlertDialog.Builder(LogInActivity.this) // corrección
-                                .setTitle("Atención")
-                                .setMessage("Ingrese un usuario y contraseña.")
-                                .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
-                                .show();
-                    } else {
-                        UserLogIn loggedUser = new UserLogIn(username, password);
+                userApi.login(loggedUser).enqueue(new Callback<TokenModel>() {
+                    @Override
+                    public void onResponse(Call<TokenModel> call, Response<TokenModel> response) {
+                        if (response.isSuccessful()) {
+                            TokenModel tokenModel = response.body();
+                            System.out.println(tokenModel.getToken());
+                            String token = tokenModel.getToken();
+                            tokenRepository.saveToken(token);
 
-                        userApi.login(loggedUser).enqueue(new Callback<TokenModel>() {
-                            @Override
-                            public void onResponse(Call<TokenModel> call, Response<TokenModel> response) {
-                                if (response.isSuccessful()) {
-                                    TokenModel tokenModel = response.body();
-                                    System.out.println(tokenModel.getToken());
-                                    String token = tokenModel.getToken();
-                                    tokenRepository.saveToken(token);
+                            Intent intent = new Intent(LogInActivity.this, MenuActivity.class);
+                            startActivity(intent);
+                            finish();
+                        } else {
+                            new AlertDialog.Builder(LogInActivity.this)
+                                    .setTitle("Atención")
+                                    .setMessage("Usuario o contraseña incorrectos.")
+                                    .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
+                                    .show();
+                        }
+                    }
 
-                                    Intent intent = new Intent(LogInActivity.this, MenuActivity.class);
-                                    startActivity(intent);
-                                    finish();
-                                } else {
-                                    new AlertDialog.Builder(LogInActivity.this)
-                                            .setTitle("Atención")
-                                            .setMessage("Usuario o contraseña incorrectos.")
-                                            .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
-                                            .show();
-                                }
-                            }
-
-                            @Override
-                            public void onFailure(Call<TokenModel> call, Throwable t) {
-                                System.out.println(t.getMessage());
-                            }
-                        });
+                    @Override
+                    public void onFailure(Call<TokenModel> call, Throwable t) {
+                        System.out.println(t.getMessage());
                     }
                 });
             }

@@ -25,4 +25,5 @@ public interface UserApi {
 
     @POST("users/jwt") //Chequear usuario con JWT guardado
     Call<UserModel> checkUserToken(@Body TokenModel token);
+
 }
