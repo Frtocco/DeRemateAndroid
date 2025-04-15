@@ -44,6 +44,9 @@ dependencies {
     implementation(libs.constraintlayout)
     // Dagger Hilt
     implementation(libs.hilt.android)
+    implementation(libs.legacy.support.v4)
+    implementation(libs.lifecycle.livedata.ktx)
+    implementation(libs.lifecycle.viewmodel.ktx)
     annotationProcessor(libs.hilt.android.compiler)
 
     // Retrofit

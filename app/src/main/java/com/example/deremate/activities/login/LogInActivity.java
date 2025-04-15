@@ -52,13 +52,14 @@ public class LogInActivity extends AppCompatActivity {
         userApi.checkUserToken(tokenToVerify).enqueue(new Callback<UserModel>() {
             @Override
             public void onResponse(Call<UserModel> call, Response<UserModel> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    UserModel userModel = response.body();
+                UserModel userModel = response.body();
+                if (response.isSuccessful() && response.body() != null && userModel.getIsVerified()) {
                     System.out.println(userModel.getUsername() + userModel.getUserId());
                     Intent intent = new Intent(LogInActivity.this, MenuActivity.class);
                     startActivity(intent);
                     finish();
-                }else{
+                }
+                else{
                     showLoginScreen();
                 }
             }
@@ -69,6 +70,8 @@ public class LogInActivity extends AppCompatActivity {
             }
         });
     }
+
+
     private void showLoginScreen() {
         EdgeToEdge.enable(LogInActivity.this);
 
@@ -112,14 +115,34 @@ public class LogInActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(Call<TokenModel> call, Response<TokenModel> response) {
                         if (response.isSuccessful()) {
+                            // Guardo el token pero antes de moverme al menu, verifico que este verificado
+
                             TokenModel tokenModel = response.body();
                             System.out.println(tokenModel.getToken());
                             String token = tokenModel.getToken();
                             tokenRepository.saveToken(token);
 
-                            Intent intent = new Intent(LogInActivity.this, MenuActivity.class);
-                            startActivity(intent);
-                            finish();
+
+                            // Me fijo con el token si el usuario buscado esta verificado
+                            userApi.checkUserToken(tokenModel).enqueue(new Callback<UserModel>() {
+                                @Override
+                                public void onResponse(Call<UserModel> call, Response<UserModel> response) {
+                                    UserModel userModel = response.body();
+                                    if(userModel.getIsVerified()){
+                                        Intent intent = new Intent(LogInActivity.this, MenuActivity.class);
+                                        startActivity(intent);
+                                        finish();
+                                    }else{
+                                        // Agregar el fragment que se fije que vuelva a enviar el email de verificacion.
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call<UserModel> call, Throwable t) {
+                                    System.out.println(t.getMessage());
+                                }
+                            });
+
                         } else {
                             new AlertDialog.Builder(LogInActivity.this)
                                     .setTitle("Atención")

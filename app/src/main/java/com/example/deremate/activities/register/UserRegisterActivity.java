@@ -92,9 +92,18 @@ public class UserRegisterActivity extends AppCompatActivity {
                             String token = tokenModel.getToken();
                             tokenRepository.saveToken(token);
 
-                            Intent intent = new Intent(UserRegisterActivity.this, MenuActivity.class);
-                            startActivity(intent);
-                            finish();
+                            new AlertDialog.Builder(UserRegisterActivity.this)
+                                    .setTitle("Atención")
+                                    .setMessage("Enviamos un email a " + email + " para que lo confirme")
+                                    .setPositiveButton("OK", (dialog, which) -> {
+                                        dialog.dismiss();
+
+                                        Intent intent = new Intent(UserRegisterActivity.this, LogInActivity.class);
+                                        startActivity(intent);
+                                        finish();
+                                    })
+                                    .show();
+
                         }else{
                             new AlertDialog.Builder(UserRegisterActivity.this)
                                     .setTitle("Atención")

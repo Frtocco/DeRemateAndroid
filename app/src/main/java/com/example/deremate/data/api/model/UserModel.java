@@ -6,6 +6,8 @@ public class UserModel {
     private String email;
     private String password;
 
+    private boolean isVerified;
+
     public UserModel(String username, String email, String password) {
         this.username = username;
         this.email = email;
@@ -27,5 +29,7 @@ public class UserModel {
     public String getPassword() {
         return password;
     }
+
+    public boolean getIsVerified(){return this.isVerified;}
 
 }

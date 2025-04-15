@@ -17,7 +17,7 @@ public interface UserApi {
     @GET("users/:id") //Get users por id
     Call<UserModel> getUserById();
 
-    @POST("users")
+    @POST("users") // Crear usuario
     Call<TokenModel> createUser(@Body UserModel user);
 
     @POST("users/login") //Login
@@ -25,5 +25,8 @@ public interface UserApi {
 
     @POST("users/jwt") //Chequear usuario con JWT guardado
     Call<UserModel> checkUserToken(@Body TokenModel token);
+
+    @POST("users/emailVerification") // Enviar mail de verificacion
+    Call<ResponseBody> sendEmailVerification(@Body UserModel model);
 
 }
