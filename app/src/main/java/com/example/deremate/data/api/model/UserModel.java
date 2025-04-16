@@ -1,11 +1,12 @@
 package com.example.deremate.data.api.model;
 
 public class UserModel {
-    private String userId;
+    private String id;
     private String username;
     private String email;
     private String password;
-    private String jwt;
+
+    private boolean isVerified;
 
     public UserModel(String username, String email, String password) {
         this.username = username;
@@ -14,7 +15,7 @@ public class UserModel {
     }
 
     public String getUserId() {
-        return userId;
+        return id;
     }
 
     public String getUsername() {
@@ -29,11 +30,6 @@ public class UserModel {
         return password;
     }
 
-    public String getJwt() {
-        return jwt;
-    }
+    public boolean getIsVerified(){return this.isVerified;}
 
-    public void setJwt(String jwt) {
-        this.jwt = jwt;
-    }
 }
