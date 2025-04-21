@@ -2,6 +2,7 @@ package com.example.deremate.di;
 
 import android.content.Context;
 
+import com.example.deremate.data.api.OrderApi;
 import com.example.deremate.data.api.UserApi;
 
 import java.io.File;
@@ -53,7 +54,8 @@ public class NetworkModule {
     @Singleton
     Retrofit provideRetrofit() {
         return new Retrofit.Builder()
-                .baseUrl("http://192.168.0.225:1234/")
+                /*.baseUrl("http://192.168.0.225:1234/")*/
+                .baseUrl("http://192.168.0.212:1234/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
     }
@@ -61,5 +63,11 @@ public class NetworkModule {
     @Singleton
     UserApi provideUserApi(Retrofit retrofit){
         return retrofit.create(UserApi.class);
+    }
+
+    @Provides
+    @Singleton
+    OrderApi provideOrderApi(Retrofit retrofit){
+        return retrofit.create(OrderApi.class);
     }
 }
