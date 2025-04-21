@@ -1,7 +1,9 @@
 package com.example.deremate.activities.pendingOrders;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.deremate.Model.Order;
 import com.example.deremate.R;
+import com.example.deremate.activities.menu.MenuActivity;
 import com.example.deremate.data.repository.order.OrderRetrofitRepository;
 import com.example.deremate.data.repository.order.OrderServiceCallBack;
 
@@ -43,6 +46,14 @@ public class pendingOrders extends AppCompatActivity {
         recyclerView.setAdapter(orderAdapter);
 
         cargarPedidos();
+
+        Button btnVolver = findViewById(R.id.btnVolverMenu);
+        btnVolver.setOnClickListener(v -> {
+            Intent intent = new Intent(pendingOrders.this, MenuActivity.class); // reemplazá con tu activity principal
+            startActivity(intent);
+            finish();
+        });
+
     }
 
     private void cargarPedidos() {
