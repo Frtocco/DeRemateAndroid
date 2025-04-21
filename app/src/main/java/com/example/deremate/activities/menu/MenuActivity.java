@@ -14,6 +14,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.deremate.R;
 import com.example.deremate.activities.login.LogInActivity;
+import com.example.deremate.activities.pendingOrders.pendingOrders;
 import com.example.deremate.data.api.UserApi;
 import com.example.deremate.data.api.model.TokenModel;
 import com.example.deremate.data.api.model.UserModel;
@@ -41,6 +42,7 @@ public class MenuActivity extends AppCompatActivity {
         setContentView(R.layout.activity_menu);
 
         Button logoutButton = findViewById(R.id.logOutButton);
+        Button pendingOrdersButton = findViewById(R.id.pendingOrdersButton);
         TextView tvUsername = findViewById(R.id.tvUsername);
 
         String savedToken = tokenRepository.getToken();
@@ -70,6 +72,11 @@ public class MenuActivity extends AppCompatActivity {
             return insets;
         });
 
+        pendingOrdersButton.setOnClickListener(v->{
+            Intent intent = new Intent(MenuActivity.this, pendingOrders.class);
+            startActivity(intent);
+            finish();
+        });
 
 
 
