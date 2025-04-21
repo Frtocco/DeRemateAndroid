@@ -53,7 +53,7 @@ public class NetworkModule {
     @Singleton
     Retrofit provideRetrofit() {
         return new Retrofit.Builder()
-                .baseUrl("http://192.168.0.225:1234/")
+                .baseUrl("https://1993-2800-810-4b2-86b1-f91d-3536-9289-b2b.ngrok-free.app/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
     }
