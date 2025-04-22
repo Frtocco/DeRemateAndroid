@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AlertDialog;
@@ -15,6 +16,18 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.deremate.R;
 import com.example.deremate.activities.login.LogInActivity;
+import com.example.deremate.models.EmailRequest;
+import com.example.deremate.models.ResponseMessage;
+import com.example.deremate.network.ApiService;
+import com.example.deremate.network.RetrofitClient;
+
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ForgotPasswordActivity extends AppCompatActivity {
 
@@ -47,6 +60,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                         .show();
             }else{
                 // Enviar email (verificar que exista la cuenta antes)
+                sendRecoveryEmail(email);
             }
         });
 
@@ -56,5 +70,37 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         });
 
 
+        backToLogIn.setOnClickListener(v -> {
+            Intent intent = new Intent(ForgotPasswordActivity.this, LogInActivity.class);
+            startActivity(intent);
+        });
+
+
+    }
+    private void sendRecoveryEmail(String email) {
+        ApiService apiService = RetrofitClient.getRetrofitInstance().create(ApiService.class);
+        EmailRequest emailRequest = new EmailRequest(email);
+
+        Call<ResponseMessage> call = apiService.sendRecoveryEmail(emailRequest);
+        call.enqueue(new Callback<ResponseMessage>() {
+            @Override
+            public void onResponse(Call<ResponseMessage> call, Response<ResponseMessage> response) {
+                if (response.isSuccessful()) {
+                    String message = response.body().getMessage();
+                    Toast.makeText(ForgotPasswordActivity.this, message, Toast.LENGTH_SHORT).show();
+                } else {
+                    try {
+                        String errorBody = response.errorBody().string();
+                        Toast.makeText(ForgotPasswordActivity.this, "Error: " + errorBody, Toast.LENGTH_LONG).show();
+                    } catch (Exception e) {
+                        Toast.makeText(ForgotPasswordActivity.this, "Error desconocido", Toast.LENGTH_SHORT).show();
+                    }}
+            }
+
+            @Override
+            public void onFailure(Call<ResponseMessage> call, Throwable t) {
+                Toast.makeText(ForgotPasswordActivity.this, "Error de conexión", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
