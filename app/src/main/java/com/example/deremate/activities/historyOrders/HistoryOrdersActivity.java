@@ -47,7 +47,9 @@ public class HistoryOrdersActivity extends AppCompatActivity {
         orderAdapter = new OrderAdapter(orderList);
         recyclerView.setAdapter(orderAdapter);
 
-        cargarPedidos();
+        String userId = getIntent().getStringExtra("userId");
+        Log.d("USER_ID", userId);
+        cargarPedidos(userId);
 
         Button btnVolver = findViewById(R.id.btnVolverMenu);
         btnVolver.setOnClickListener(v -> {
@@ -58,8 +60,8 @@ public class HistoryOrdersActivity extends AppCompatActivity {
 
     }
 
-    private void cargarPedidos() {
-        orderRepository.getHistoryOrders("1",new OrderServiceCallBack() {
+    private void cargarPedidos(String riderId) {
+        orderRepository.getHistoryOrders(riderId,new OrderServiceCallBack() {
             @Override
             public void onSuccess(List<Order> orders) {
                 runOnUiThread(() -> {

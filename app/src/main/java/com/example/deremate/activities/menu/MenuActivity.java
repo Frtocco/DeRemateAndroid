@@ -36,6 +36,8 @@ public class MenuActivity extends AppCompatActivity {
     @Inject
     UserApi userApi;
 
+    private String userId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +60,7 @@ public class MenuActivity extends AppCompatActivity {
             public void onResponse(Call<UserModel> call, Response<UserModel> response) {
                 if(response.isSuccessful()){
                     UserModel userModel = response.body();
+                    userId = userModel.getUserId();
                     tvUsername.setText("Hola denuevo, " + userModel.getUsername());
                 }
             }
@@ -83,6 +86,7 @@ public class MenuActivity extends AppCompatActivity {
 
         historyOrdersButton.setOnClickListener(v->{
             Intent intent = new Intent(MenuActivity.this, HistoryOrdersActivity.class);
+            intent.putExtra("userId", this.userId);
             startActivity(intent);
             finish();
         });
