@@ -16,20 +16,23 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.deremate.R;
 import com.example.deremate.activities.login.LogInActivity;
+import com.example.deremate.data.api.UserApi;
 import com.example.deremate.models.EmailRequest;
 import com.example.deremate.models.ResponseMessage;
-import com.example.deremate.network.ApiService;
-import com.example.deremate.network.RetrofitClient;
 
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.AndroidEntryPoint;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+@AndroidEntryPoint
 public class ForgotPasswordActivity extends AppCompatActivity {
+
+    @Inject
+    UserApi userApi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,11 +81,10 @@ public class ForgotPasswordActivity extends AppCompatActivity {
 
     }
     private void sendRecoveryEmail(String email) {
-        ApiService apiService = RetrofitClient.getRetrofitInstance().create(ApiService.class);
+
         EmailRequest emailRequest = new EmailRequest(email);
 
-        Call<ResponseMessage> call = apiService.sendRecoveryEmail(emailRequest);
-        call.enqueue(new Callback<ResponseMessage>() {
+        userApi.sendRecoveryEmail(emailRequest).enqueue(new Callback<ResponseMessage>() {
             @Override
             public void onResponse(Call<ResponseMessage> call, Response<ResponseMessage> response) {
                 if (response.isSuccessful()) {
