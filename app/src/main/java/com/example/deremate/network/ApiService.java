@@ -8,7 +8,7 @@ import retrofit2.http.POST;
 
 public interface ApiService {
 
-    @POST("forgot-password") // Asegúrate de que esta URL coincida con la del backend
+    @POST("users/forgot-password") // Asegúrate de que esta URL coincida con la del backend
     Call<ResponseMessage> sendRecoveryEmail(@Body EmailRequest emailRequest);
 
 }
