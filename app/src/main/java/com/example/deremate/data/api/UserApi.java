@@ -28,5 +28,4 @@ public interface UserApi {
 
     @POST("users/emailVerification") // Enviar mail de verificacion
     Call<ResponseBody> sendEmailVerification(@Body UserModel model);
-
 }

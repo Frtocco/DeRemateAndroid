@@ -27,6 +27,7 @@ import android.widget.TextView;
 import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -91,18 +92,41 @@ public class UserRegisterActivity extends AppCompatActivity {
 
                             String token = tokenModel.getToken();
                             tokenRepository.saveToken(token);
+                            userApi.sendEmailVerification(userModel).enqueue(new Callback<ResponseBody>() {
+                                @Override
+                                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                    if(response.isSuccessful()){
+                                        new AlertDialog.Builder(UserRegisterActivity.this)
+                                                .setTitle("Atención")
+                                                .setMessage("Enviamos un email a " + email + " para que lo confirme")
+                                                .setPositiveButton("OK", (dialog, which) -> {
+                                                    dialog.dismiss();
 
-                            new AlertDialog.Builder(UserRegisterActivity.this)
-                                    .setTitle("Atención")
-                                    .setMessage("Enviamos un email a " + email + " para que lo confirme")
-                                    .setPositiveButton("OK", (dialog, which) -> {
-                                        dialog.dismiss();
+                                                    Intent intent = new Intent(UserRegisterActivity.this, LogInActivity.class);
+                                                    startActivity(intent);
+                                                    finish();
+                                                })
+                                                .show();
+                                    }
+                                    System.out.println(response.isSuccessful());
+                                    System.out.println(userModel.getEmail());
+                                    System.out.println(userModel.getUsername());
+                                    System.out.println(userModel.getPassword());
+                                }
 
-                                        Intent intent = new Intent(UserRegisterActivity.this, LogInActivity.class);
-                                        startActivity(intent);
-                                        finish();
-                                    })
-                                    .show();
+
+                                @Override
+                                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                    new AlertDialog.Builder(UserRegisterActivity.this)
+                                            .setTitle("Atención")
+                                            .setMessage("No pudimos enviar un email a " + email + " verifique que haya sido escrito de manera correcta")
+                                            .setPositiveButton("OK", (dialog, which) -> {
+                                                dialog.dismiss();
+                                            })
+                                            .show();
+                                }
+                            });
+
 
                         }else{
                             new AlertDialog.Builder(UserRegisterActivity.this)
