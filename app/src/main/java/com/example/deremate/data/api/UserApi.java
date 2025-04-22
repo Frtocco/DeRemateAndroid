@@ -1,6 +1,8 @@
 package com.example.deremate.data.api;
 
 import com.example.deremate.data.api.model.*;
+import com.example.deremate.models.EmailRequest;
+import com.example.deremate.models.ResponseMessage;
 
 import java.util.List;
 
@@ -28,4 +30,7 @@ public interface UserApi {
 
     @POST("users/emailVerification") // Enviar mail de verificacion
     Call<ResponseBody> sendEmailVerification(@Body UserModel model);
+
+    @POST("users/forgot-password") // Asegúrate de que esta URL coincida con la del backend
+    Call<ResponseMessage> sendRecoveryEmail(@Body EmailRequest emailRequest);
 }
