@@ -1,5 +1,6 @@
 package com.example.deremate.fragments;
 
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
@@ -38,15 +39,17 @@ public class ResendEmailFragment extends Fragment {
     @Inject
     public TokenRepository tokenRepository;
 
+    private FragmentManager fragmentManager;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_resend_email, container, false);
-
+        fragmentManager = getActivity().getSupportFragmentManager();
         String savedToken = tokenRepository.getToken();
         TokenModel tokenModel = new TokenModel(savedToken);
 
-        EditText displayEmail = view.findViewById(R.id.etConfirmacion);
+        TextView displayEmail = view.findViewById(R.id.etConfirmacion);
         Button resendButton = view.findViewById(R.id.btnResend);
 
         userApi.checkUserToken(tokenModel).enqueue(new Callback<UserModel>() {
@@ -54,13 +57,11 @@ public class ResendEmailFragment extends Fragment {
             public void onResponse(Call<UserModel> call, Response<UserModel> response) {
                 if(response.isSuccessful() && response.body() != null){
                     UserModel userModel = response.body();
-                    displayEmail.setText("Desea reenviar el email a " + userModel.getEmail());
-
-
-                    // Agregar logica de llamado de API para reenviar el email.
+                    displayEmail.setText("Usted no esta verificado todavia, reenvie el correo de verificacion para que pueda verificarse, este sera enviado a " + userModel.getEmail());
 
                     resendButton.setOnClickListener(v -> {
-
+                        // Agregar logica de llamado de API para reenviar el email.
+                        getParentFragmentManager().popBackStack();
                     });
 
                 }
@@ -75,5 +76,7 @@ public class ResendEmailFragment extends Fragment {
 
         return view;
     }
+
+
 
 }
