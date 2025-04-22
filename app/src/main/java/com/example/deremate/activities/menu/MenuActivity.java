@@ -13,6 +13,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.deremate.R;
+import com.example.deremate.activities.historyOrders.HistoryOrdersActivity;
 import com.example.deremate.activities.login.LogInActivity;
 import com.example.deremate.activities.pendingOrders.pendingOrders;
 import com.example.deremate.data.api.UserApi;
@@ -35,6 +36,8 @@ public class MenuActivity extends AppCompatActivity {
     @Inject
     UserApi userApi;
 
+    private String userId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,7 +46,9 @@ public class MenuActivity extends AppCompatActivity {
 
         Button logoutButton = findViewById(R.id.logOutButton);
         Button pendingOrdersButton = findViewById(R.id.pendingOrdersButton);
+        Button historyOrdersButton = findViewById(R.id.historyOrdersButton);
         TextView tvUsername = findViewById(R.id.tvUsername);
+
 
         String savedToken = tokenRepository.getToken();
         TokenModel tokenToVerify = new TokenModel(savedToken);
@@ -55,6 +60,7 @@ public class MenuActivity extends AppCompatActivity {
             public void onResponse(Call<UserModel> call, Response<UserModel> response) {
                 if(response.isSuccessful()){
                     UserModel userModel = response.body();
+                    userId = userModel.getUserId();
                     tvUsername.setText("Hola denuevo, " + userModel.getUsername());
                 }
             }
@@ -74,6 +80,13 @@ public class MenuActivity extends AppCompatActivity {
 
         pendingOrdersButton.setOnClickListener(v->{
             Intent intent = new Intent(MenuActivity.this, pendingOrders.class);
+            startActivity(intent);
+            finish();
+        });
+
+        historyOrdersButton.setOnClickListener(v->{
+            Intent intent = new Intent(MenuActivity.this, HistoryOrdersActivity.class);
+            intent.putExtra("userId", this.userId);
             startActivity(intent);
             finish();
         });
