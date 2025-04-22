@@ -143,6 +143,7 @@ public class LogInActivity extends AppCompatActivity {
                                 @Override   
                                 public void onResponse(Call<UserModel> call, Response<UserModel> response) {
                                     UserModel userModel = response.body();
+                                    System.out.println(userModel.getIsVerified());
                                     if(userModel.getIsVerified()){
                                         Intent intent = new Intent(LogInActivity.this, MenuActivity.class);
                                         startActivity(intent);
