@@ -20,9 +20,7 @@ import com.example.deremate.data.api.UserApi;
 import com.example.deremate.models.EmailRequest;
 import com.example.deremate.models.ResponseMessage;
 
-
 import javax.inject.Inject;
-
 import dagger.hilt.android.AndroidEntryPoint;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -30,6 +28,8 @@ import retrofit2.Response;
 
 @AndroidEntryPoint
 public class ForgotPasswordActivity extends AppCompatActivity {
+    @Inject
+    public UserApi userApi;
 
     @Inject
     UserApi userApi;
@@ -78,12 +78,10 @@ public class ForgotPasswordActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-
     }
     private void sendRecoveryEmail(String email) {
 
         EmailRequest emailRequest = new EmailRequest(email);
-
         userApi.sendRecoveryEmail(emailRequest).enqueue(new Callback<ResponseMessage>() {
             @Override
             public void onResponse(Call<ResponseMessage> call, Response<ResponseMessage> response) {

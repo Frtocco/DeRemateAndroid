@@ -33,5 +33,4 @@ public interface UserApi {
 
     @POST("users/forgot-password") // Asegúrate de que esta URL coincida con la del backend
     Call<ResponseMessage> sendRecoveryEmail(@Body EmailRequest emailRequest);
-
 }
