@@ -31,9 +31,6 @@ public class ForgotPasswordActivity extends AppCompatActivity {
     @Inject
     public UserApi userApi;
 
-    @Inject
-    UserApi userApi;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
