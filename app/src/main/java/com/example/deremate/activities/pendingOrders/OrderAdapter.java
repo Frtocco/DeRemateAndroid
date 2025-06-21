@@ -35,6 +35,22 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         holder.txtOrderId.setText("ID: " + order.getOrderId());
         holder.txtStatus.setText("Estado: " + order.getStatus());
         holder.txtAddress.setText("Dirección: " + order.getAddress());
+<<<<<<< Updated upstream
+=======
+
+        boolean isCompleted = "Completed".equalsIgnoreCase(order.getStatus());
+
+        if (isCompleted) {
+            holder.btnVerOpinion.setVisibility(View.VISIBLE);
+            holder.btnVerOpinion.setOnClickListener(v -> {
+                if (opinionClickListener != null) {
+                    opinionClickListener.onOpinionClick(order);
+                }
+            });
+        } else {
+            holder.btnVerOpinion.setVisibility(View.GONE);
+        }
+>>>>>>> Stashed changes
     }
 
     @Override

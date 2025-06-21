@@ -44,4 +44,20 @@ public class Order {
     public void setAddress(String address) {
         this.address = address;
     }
+<<<<<<< Updated upstream
+=======
+
+    public String getComent() {
+        return coment;
+    }
+
+    public float getComentPunt() {
+        if (comentPunt == null || comentPunt.trim().isEmpty()) return 0f;
+        try {
+            return Float.parseFloat(comentPunt);
+        } catch (NumberFormatException e) {
+            return 0f;
+        }
+    }
+>>>>>>> Stashed changes
 }
