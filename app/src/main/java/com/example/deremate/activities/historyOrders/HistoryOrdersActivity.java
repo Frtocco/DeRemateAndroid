@@ -43,7 +43,7 @@ public class HistoryOrdersActivity extends AppCompatActivity {
 
         orderAdapter.setOpinionClickListener(order -> {
             Log.d("ORDER", order.getComentPunt()+ order.getComent());
-            OpinionFragment.newInstance(order.getComentPunt(), order.getComent())
+            OpinionFragment.newInstance(order.getComentPunt(), order.getComent(),order.getImgLink())
                     .show(getSupportFragmentManager(), "OpinionFragment");
         });
 

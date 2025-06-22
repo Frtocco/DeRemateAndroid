@@ -9,6 +9,7 @@ public class OrderModelListResponse {
         private String riderId;
         private String coment;
         private String comentPunt;
+        private String imgLink;
 
         public String getStatus() {
             return status;
@@ -28,4 +29,5 @@ public class OrderModelListResponse {
 
         public String getComent() {return coment;}
         public String getComentPunt() {return comentPunt;}
+        public String getImgLink() {return imgLink;}
 }

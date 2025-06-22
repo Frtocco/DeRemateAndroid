@@ -9,14 +9,16 @@ public class Order {
     private String address;
     private String coment;
     private String comentPunt;
+    private String imgLink;
 
-    public Order(String orderId, String riderId, String status, String address, String coment, String comentPunt) {
+    public Order(String orderId, String riderId, String status, String address, String coment, String comentPunt,String imgLink) {
         this.orderId = orderId;
         this.riderId = riderId;
         this.status = status;
         this.address = address;
         this.coment = coment;
         this.comentPunt = comentPunt;
+        this.imgLink = imgLink;
     }
 
     public String getOrderId() {
@@ -65,4 +67,7 @@ public class Order {
             return 0f;
         }
     }
+    public String getImgLink() {
+        Log.d("ORDER","Valor img: "+this.imgLink);
+        return this.imgLink;}
 }
