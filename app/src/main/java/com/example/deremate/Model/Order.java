@@ -1,16 +1,22 @@
 package com.example.deremate.Model;
 
+import android.util.Log;
+
 public class Order {
     private String orderId;
     private String riderId;
     private String status;
     private String address;
+    private String coment;
+    private String comentPunt;
 
-    public Order(String orderId, String riderId, String status, String address) {
+    public Order(String orderId, String riderId, String status, String address, String coment, String comentPunt) {
         this.orderId = orderId;
         this.riderId = riderId;
         this.status = status;
         this.address = address;
+        this.coment = coment;
+        this.comentPunt = comentPunt;
     }
 
     public String getOrderId() {
@@ -44,14 +50,14 @@ public class Order {
     public void setAddress(String address) {
         this.address = address;
     }
-<<<<<<< Updated upstream
-=======
 
     public String getComent() {
+        Log.d("ORDER","Valor: "+this.coment);
         return coment;
     }
 
     public float getComentPunt() {
+        Log.d("ORDER","Valor: "+this.comentPunt);
         if (comentPunt == null || comentPunt.trim().isEmpty()) return 0f;
         try {
             return Float.parseFloat(comentPunt);
@@ -59,5 +65,4 @@ public class Order {
             return 0f;
         }
     }
->>>>>>> Stashed changes
 }

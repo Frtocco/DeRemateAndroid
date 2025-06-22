@@ -5,21 +5,16 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.deremate.Model.Order;
 import com.example.deremate.R;
 import com.example.deremate.activities.menu.MenuActivity;
-import com.example.deremate.activities.pendingOrders.OrderAdapter;
-import com.example.deremate.activities.pendingOrders.pendingOrders;
 import com.example.deremate.data.repository.order.OrderRetrofitRepository;
 import com.example.deremate.data.repository.order.OrderServiceCallBack;
+import com.example.deremate.fragments.OpinionFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,23 +40,28 @@ public class HistoryOrdersActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerOrders);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         orderAdapter = new OrderAdapter(orderList);
+
+        orderAdapter.setOpinionClickListener(order -> {
+            Log.d("ORDER", order.getComentPunt()+ order.getComent());
+            OpinionFragment.newInstance(order.getComentPunt(), order.getComent())
+                    .show(getSupportFragmentManager(), "OpinionFragment");
+        });
+
         recyclerView.setAdapter(orderAdapter);
 
         String userId = getIntent().getStringExtra("userId");
-        Log.d("USER_ID", userId);
         cargarPedidos(userId);
 
         Button btnVolver = findViewById(R.id.btnVolverMenu);
         btnVolver.setOnClickListener(v -> {
-            Intent intent = new Intent(HistoryOrdersActivity.this, MenuActivity.class); // reemplazá con tu activity principal
+            Intent intent = new Intent(HistoryOrdersActivity.this, MenuActivity.class);
             startActivity(intent);
             finish();
         });
-
     }
 
     private void cargarPedidos(String riderId) {
-        orderRepository.getHistoryOrders(riderId,new OrderServiceCallBack() {
+        orderRepository.getHistoryOrders(riderId, new OrderServiceCallBack() {
             @Override
             public void onSuccess(List<Order> orders) {
                 runOnUiThread(() -> {

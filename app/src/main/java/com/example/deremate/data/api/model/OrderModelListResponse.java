@@ -7,6 +7,8 @@ public class OrderModelListResponse {
         private String address;
         private String orderId;
         private String riderId;
+        private String coment;
+        private String comentPunt;
 
         public String getStatus() {
             return status;
@@ -24,4 +26,6 @@ public class OrderModelListResponse {
             return riderId;
         }
 
+        public String getComent() {return coment;}
+        public String getComentPunt() {return comentPunt;}
 }

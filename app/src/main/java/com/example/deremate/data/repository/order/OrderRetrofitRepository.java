@@ -42,7 +42,9 @@ public class OrderRetrofitRepository implements OrderRepository {
                                 item.getOrderId(),
                                 item.getRiderId(),
                                 item.getStatus(),
-                                item.getAddress()
+                                item.getAddress(),
+                                item.getComent(),
+                                item.getComentPunt()
                         ));
                     }
 
@@ -79,7 +81,9 @@ public class OrderRetrofitRepository implements OrderRepository {
                                 item.getOrderId(),
                                 item.getRiderId(),
                                 item.getStatus(),
-                                item.getAddress()
+                                item.getAddress(),
+                                item.getComent(),
+                                item.getComentPunt()
                         ));
                     }
 

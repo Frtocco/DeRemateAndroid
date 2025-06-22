@@ -1,11 +1,11 @@
-package com.example.deremate.activities.pendingOrders;
+package com.example.deremate.activities.historyOrders;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.deremate.Model.Order;
@@ -16,27 +16,30 @@ import java.util.List;
 public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHolder> {
 
     private final List<Order> orders;
+    private OnOpinionClickListener opinionClickListener;
 
     public OrderAdapter(List<Order> orders) {
         this.orders = orders;
     }
 
-    @NonNull
+    public void setOpinionClickListener(OnOpinionClickListener listener) {
+        this.opinionClickListener = listener;
+    }
+
+
     @Override
-    public OrderViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public OrderViewHolder onCreateViewHolder( ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_order, parent, false);
         return new OrderViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull OrderViewHolder holder, int position) {
+    public void onBindViewHolder( OrderViewHolder holder, int position) {
         Order order = orders.get(position);
         holder.txtOrderId.setText("ID: " + order.getOrderId());
         holder.txtStatus.setText("Estado: " + order.getStatus());
         holder.txtAddress.setText("Dirección: " + order.getAddress());
-<<<<<<< Updated upstream
-=======
 
         boolean isCompleted = "Completed".equalsIgnoreCase(order.getStatus());
 
@@ -50,7 +53,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         } else {
             holder.btnVerOpinion.setVisibility(View.GONE);
         }
->>>>>>> Stashed changes
+
     }
 
     @Override
@@ -60,13 +63,18 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
 
     static class OrderViewHolder extends RecyclerView.ViewHolder {
         TextView txtOrderId, txtStatus, txtAddress;
+        Button btnVerOpinion;
 
-        public OrderViewHolder(@NonNull View itemView) {
+        public OrderViewHolder( View itemView) {
             super(itemView);
             txtOrderId = itemView.findViewById(R.id.txtOrderId);
             txtStatus = itemView.findViewById(R.id.txtStatus);
             txtAddress = itemView.findViewById(R.id.txtAddress);
+            btnVerOpinion = itemView.findViewById(R.id.btnVerOpinion); // esto es clave
         }
     }
-}
 
+    public interface OnOpinionClickListener {
+        void onOpinionClick(Order order);
+    }
+}
