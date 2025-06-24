@@ -6,5 +6,4 @@ public class OrderModel {
     private String orderId;
     private String riderId;
 
-
 }

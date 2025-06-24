@@ -2,6 +2,7 @@ package com.example.deremate.di;
 
 import android.content.Context;
 
+import com.example.deremate.data.api.ComentApi;
 import com.example.deremate.data.api.OrderApi;
 import com.example.deremate.data.api.UserApi;
 
@@ -68,5 +69,10 @@ public class NetworkModule {
     @Singleton
     OrderApi provideOrderApi(Retrofit retrofit){
         return retrofit.create(OrderApi.class);
+    }
+    @Provides
+    @Singleton
+    ComentApi provideComentApi(Retrofit retrofit){
+        return retrofit.create(ComentApi.class);
     }
 }
